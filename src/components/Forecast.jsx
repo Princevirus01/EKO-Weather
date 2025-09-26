@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { formatTemp, formatPrecip } from "../utils";
 
-export default function Forecast({ weather }) {
+export default function Forecast({ weather, tempUnit, precipUnit }) {
   if (!weather || !weather.daily) return null;
 
   const [dayIndex, setDayIndex] = useState(0);
@@ -30,8 +31,8 @@ export default function Forecast({ weather }) {
           ))}
         </div>
         <p>📅 {selected.date}</p>
-        <p>🌡 Min: {selected.min} °C / Max: {selected.max} °C</p>
-        <p>🌧 Precipitation: {selected.precipitation} mm</p>
+        <p>🌡 Min: {formatTemp(selected.min, tempUnit)} / Max: {formatTemp(selected.max, tempUnit)}</p>
+        <p>🌧 Precipitation: {formatPrecip(selected.precipitation, precipUnit)}</p>
       </div>
     </div>
   );
