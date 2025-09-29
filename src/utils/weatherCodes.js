@@ -1,0 +1,28 @@
+
+// src/utils/weatherCodes.js
+export const weatherCodeMap = {
+  0: { desc: "Clear sky", icon: "☀️" },
+  1: { desc: "Mainly clear", icon: "🌤️" },
+  2: { desc: "Partly cloudy", icon: "⛅" },
+  3: { desc: "Overcast", icon: "☁️" },
+  45: { desc: "Fog", icon: "🌫️" },
+  48: { desc: "Depositing rime fog", icon: "🌫️" },
+  51: { desc: "Light drizzle", icon: "🌦️" },
+  53: { desc: "Moderate drizzle", icon: "🌦️" },
+  55: { desc: "Dense drizzle", icon: "🌧️" },
+  61: { desc: "Slight rain", icon: "🌧️" },
+  63: { desc: "Moderate rain", icon: "🌧️" },
+  65: { desc: "Heavy rain", icon: "🌧️" },
+  71: { desc: "Slight snow fall", icon: "🌨️" },
+  73: { desc: "Moderate snow fall", icon: "🌨️" },
+  75: { desc: "Heavy snow fall", icon: "❄️" },
+  77: { desc: "Snow grains", icon: "❄️" },
+  80: { desc: "Rain showers (slight)", icon: "🌦️" },
+  81: { desc: "Rain showers (moderate)", icon: "🌧️" },
+  82: { desc: "Rain showers (violent)", icon: "🌧️" },
+  85: { desc: "Snow showers (slight)", icon: "🌨️" },
+  86: { desc: "Snow showers (heavy)", icon: "❄️" },
+  95: { desc: "Thunderstorm (slight/moderate)", icon: "⛈️" },
+  96: { desc: "Thunderstorm with slight hail", icon: "⛈️" },
+  99: { desc: "Thunderstorm with heavy hail", icon: "⛈️" },
+};

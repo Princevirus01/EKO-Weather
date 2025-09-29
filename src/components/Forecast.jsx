@@ -1,39 +1,101 @@
-import { useState } from "react";
-import { formatTemp, formatPrecip } from "../utils";
+// src/components/Forecast.jsx
+import React, { useState } from "react";
 
-export default function Forecast({ weather, tempUnit, precipUnit }) {
-  if (!weather || !weather.daily) return null;
+export default function Forecast({ weather, tempUnit, precipUnit, windUnit }) {
+  const [expandedDay, setExpandedDay] = useState(null);
 
-  const [dayIndex, setDayIndex] = useState(0);
+  if (!weather) return null;
 
-  const days = weather.daily.time.map((d, i) => ({
-    date: new Date(d).toDateString(),
-    min: weather.daily.temperature_2m_min[i],
-    max: weather.daily.temperature_2m_max[i],
-    precipitation: weather.daily.precipitation_sum[i],
-  }));
+  const formatTemp = (temp) => {
+    if (temp === undefined || temp === null) return "N/A";
+    return tempUnit === "celsius"
+      ? `${temp.toFixed(1)}°C`
+      : `${((temp * 9) / 5 + 32).toFixed(1)}°F`;
+  };
 
-  const selected = days[dayIndex];
+  const formatPrecip = (precip) => {
+    if (precip === undefined || precip === null) return "N/A";
+    return precipUnit === "mm"
+      ? `${precip.toFixed(1)} mm`
+      : `${(precip / 25.4).toFixed(2)} in`;
+  };
+
+  const formatWind = (wind) => {
+    if (wind === undefined || wind === null) return "N/A";
+    return windUnit === "kmh"
+      ? `${wind.toFixed(1)} km/h`
+      : `${(wind / 1.609).toFixed(1)} mph`;
+  };
 
   return (
-    <div className="card shadow-sm mb-4">
-      <div className="card-body">
-        <h4 className="card-title">Daily Forecast</h4>
-        <div className="btn-group mb-3">
-          {days.map((d, i) => (
-            <button
-              key={i}
-              className={`btn btn-sm ${i === dayIndex ? "btn-primary" : "btn-outline-primary"}`}
-              onClick={() => setDayIndex(i)}
-            >
-              {new Date(d.date).toLocaleDateString("en-US", { weekday: "short" })}
-            </button>
-          ))}
+    <div className="forecast mt-4">
+      <h2 className="mb-3 text-center">🌤️ Daily Forecast</h2>
+
+      {weather.forecast.map((day, i) => (
+        <div
+          key={i}
+          className="card mb-3 shadow-sm"
+          style={{ borderRadius: "12px" }}
+        >
+          {/* Header section */}
+          <div
+            className="card-header d-flex justify-content-between align-items-center"
+            style={{ cursor: "pointer", background: "#f8f9fa" }}
+            onClick={() => setExpandedDay(expandedDay === i ? null : i)}
+          >
+            <h5 className="mb-0">
+              {new Date(day.date).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+              })}
+            </h5>
+            <span style={{ fontSize: "18px" }}>
+              {expandedDay === i ? "▲" : "▼"}
+            </span>
+          </div>
+
+          {/* Daily summary */}
+          <div className="card-body">
+            <div className="d-flex flex-wrap align-items-center gap-3">
+              <div className="fw-bold">
+                {day.condition.icon} {day.condition.label}
+              </div>
+              <div>🌡 {formatTemp(day.temp.max)} / {formatTemp(day.temp.min)}</div>
+              <div>💧 {formatPrecip(day.precip)}</div>
+              <div>💨 {formatWind(day.wind)}</div>
+            </div>
+
+            {/* Hourly dropdown */}
+            {expandedDay === i && (
+              <div className="mt-3 border-top pt-3">
+                <h6 className="fw-bold mb-2">Hourly Forecast</h6>
+                <div className="list-group">
+                  {day.hourly.map((h, j) => (
+                    <div
+                      key={j}
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      <span>
+                        {new Date(h.time).toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          hour12: true,
+                        })}
+                      </span>
+                      <span>
+                        {h.condition.icon} {h.condition.label}
+                      </span>
+                      <span>{formatTemp(h.temp)}</span>
+                      <span>💧 {formatPrecip(h.precip)}</span>
+                      <span>💨 {formatWind(h.wind)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        <p>📅 {selected.date}</p>
-        <p>🌡 Min: {formatTemp(selected.min, tempUnit)} / Max: {formatTemp(selected.max, tempUnit)}</p>
-        <p>🌧 Precipitation: {formatPrecip(selected.precipitation, precipUnit)}</p>
-      </div>
+      ))}
     </div>
   );
 }
