@@ -35,7 +35,7 @@ export default function NotificationBanner({ notification, onClose }) {
         >
           <span>{notification.text}</span>
           <button
-            className="btn-close btn-close-white"
+            className="btn-close btn-close-white btns"
             onClick={onClose}
             aria-label="Close"
           />
